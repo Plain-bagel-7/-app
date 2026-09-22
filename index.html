@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Boston → Chicago · 13天独行手册</title>
+<style>
+  :root{
+    --paper:#EDE7D8;
+    --paper-2:#F6F2E7;
+    --ink:#242019;
+    --ink-soft:#6b6355;
+    --line:#d3c9b2;
+    --amber:#a9711f;
+    --amber-soft:#f1e2c4;
+    --teal:#2c6b64;
+    --teal-soft:#dbe9e5;
+    --rust:#a34530;
+    --rust-soft:#f1ddd3;
+    --navy:#2b4468;
+    --navy-soft:#dde4ee;
+    --ok:#3c7a4e;
+    --pending:#a9711f;
+    --alert:#a34530;
+    --shadow: 0 1px 0 rgba(36,32,25,.06);
+    --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'SF Mono', SFMono-Regular, 'Roboto Mono', Consolas, 'Liberation Mono', monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#1b1912;
+      --paper-2:#242019;
+      --ink:#ede7d8;
+      --ink-soft:#a89f8c;
+      --line:#3a3527;
+      --amber:#d99f3f;
+      --amber-soft:#3a2f18;
+      --teal:#5fa89f;
+      --teal-soft:#1c2f2c;
+      --rust:#d6785f;
+      --rust-soft:#332019;
+      --navy:#8fa6cc;
+      --navy-soft:#1c2434;
+      --ok:#6fbf85;
+      --pending:#d99f3f;
+      --alert:#d6785f;
+    }
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:640px;margin:0 auto;padding:0 18px 80px;}
+
+  /* ---------- top nav ---------- */
+  .jumpnav{
+    position:sticky;top:0;z-index:20;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+    white-space:nowrap;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .jumpnav::-webkit-scrollbar{display:none;}
+  .jumpnav-inner{max-width:640px;margin:0 auto;padding:10px 18px;display:flex;gap:18px;}
+  .jumpnav a{font-size:13px;color:var(--ink-soft);text-decoration:none;flex:0 0 auto;}
+  .jumpnav a:active{color:var(--ink);}
+
+  /* ---------- now card ---------- */
+  .now{
+    margin-top:20px;
+    padding:22px 20px 24px;
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+  }
+  .now-label{font-size:13px;color:var(--ink-soft);margin:0 0 6px;}
+  .now-title{font-family:var(--serif);font-size:21px;margin:0 0 16px;line-height:1.3;}
+  .now-clock{
+    display:flex;gap:14px;
+  }
+  .now-unit{flex:1;text-align:center;}
+  .now-num{
+    font-family:var(--mono);font-size:32px;font-weight:600;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:-.02em;
+  }
+  .now-unit-label{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+  .now-sub{margin-top:16px;font-size:13px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:12px;}
+  .now-sub b{color:var(--ink);font-weight:600;}
+  .now-done{font-family:var(--serif);font-size:19px;padding:6px 0;}
+
+  /* ---------- section headers ---------- */
+  section{margin-top:44px;}
+  .sec-head{margin-bottom:16px;}
+  .sec-eyebrow{font-size:12px;color:var(--ink-soft);margin:0 0 2px;}
+  .sec-title{font-family:var(--serif);font-size:24px;margin:0;}
+  .sec-note{font-size:13px;color:var(--ink-soft);margin-top:6px;}
+
+  /* ---------- overview map ---------- */
+  .mapcard{
+    background:var(--paper-2);border:1px solid var(--line);border-radius:4px;
+    padding:10px 10px 16px;
+  }
+  .mapcard svg{width:100%;height:auto;display:block;}
+  .maplegend{display:flex;flex-wrap:wrap;gap:10px 18px;padding:12px 10px 0;font-size:12.5px;color:var(--ink-soft);}
+  .maplegend span{display:inline-flex;align-items:center;gap:6px;}
+  .swatch{width:14px;height:3px;border-radius:2px;display:inline-block;}
+
+  /* ---------- logistics ---------- */
+  .logi{border:1px solid var(--line);border-radius:4px;margin-bottom:12px;overflow:hidden;background:var(--paper-2);}
+  .logi-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--line);}
+  .logi-head h3{font-family:var(--serif);font-size:17px;margin:0;font-weight:normal;}
+  .status{font-size:11.5px;padding:3px 8px;border-radius:20px;white-space:nowrap;}
+  .status.ok{background:var(--teal-soft);color:var(--ok);}
+  .status.pending{background:var(--amber-soft);color:var(--pending);}
+  .logi-body{padding:14px 16px;font-size:14.5px;}
+  .logi-row{display:flex;gap:10px;padding:4px 0;}
+  .logi-row .k{flex:0 0 64px;color:var(--ink-soft);font-size:12.5px;padding-top:2px;}
+  .logi-row .v{flex:1;}
+  .logi-row a.navlink{color:var(--teal);text-decoration:none;border-bottom:1px dotted var(--teal);}
+  .logi-time{font-family:var(--mono);}
+
+  /* ---------- day cards ---------- */
+  .day{
+    border:1px solid var(--line);
+    border-left:4px solid var(--leg,var(--ink-soft));
+    border-radius:4px;
+    margin-bottom:14px;
+    background:var(--paper-2);
+    overflow:hidden;
+  }
+  .day-head{padding:14px 16px;}
+  .day-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .day-num{font-size:12px;color:var(--ink-soft);}
+  .day-date{font-family:var(--serif);font-size:19px;margin:2px 0 0;}
+  .day-city{font-size:13px;color:var(--leg,var(--ink-soft));font-weight:600;}
+  .day-overnight{font-size:12.5px;color:var(--ink-soft);margin-top:6px;}
+  .day-overnight .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;position:relative;top:-1px;}
+  .dot.ok{background:var(--ok);}
+  .dot.pending{background:var(--pending);border:1px solid var(--pending);}
+
+  .day-items{padding:2px 16px 14px;}
+  .item{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line);}
+  .item:first-child{border-top:none;}
+  .item-time{flex:0 0 74px;font-family:var(--mono);font-size:12.5px;padding-top:1px;color:var(--ink-soft);}
+  .item-time b{display:block;font-size:13.5px;color:var(--ink);font-weight:600;}
+  .item-time .tz{display:block;font-size:10.5px;margin-top:1px;}
+  .item-main{flex:1;min-width:0;}
+  .item-title{font-size:14.5px;}
+  .item-title a{text-decoration:none;color:inherit;border-bottom:1px dotted var(--teal);}
+  .item-note{font-size:12.5px;color:var(--ink-soft);margin-top:3px;}
+  .item-note.alert{color:var(--alert);}
+  .tag-book{
+    display:inline-block;font-size:11px;background:var(--rust-soft);color:var(--rust);
+    padding:1px 7px;border-radius:20px;margin-left:6px;white-space:nowrap;
+  }
+  .tag-draft{
+    display:inline-block;font-size:10.5px;color:var(--ink-soft);border:1px solid var(--line);
+    padding:1px 6px;border-radius:20px;margin-left:6px;
+  }
+  .booklink{display:block;margin-top:4px;font-size:12.5px;}
+  .booklink a{color:var(--rust);text-decoration:none;border-bottom:1px dotted var(--rust);}
+
+  /* day map toggle */
+  .day-maptoggle{
+    display:flex;align-items:center;gap:6px;
+    margin:10px 16px 0;padding:9px 12px;
+    border:1px solid var(--line);border-radius:4px;
+    font-size:13px;color:var(--ink-soft);background:transparent;
+    cursor:pointer;width:calc(100% - 32px);text-align:left;
+  }
+  .day-maptoggle:active{background:var(--paper);}
+  .day-maptoggle .chev{margin-left:auto;transition:transform .15s ease;font-size:11px;}
+  .day-maptoggle[aria-expanded="true"] .chev{transform:rotate(180deg);}
+  .day-mapbox{
+    margin:8px 16px 14px;padding:14px;border-radius:4px;
+    display:none;
+  }
+  .day-mapbox.open{display:block;}
+  .day-mapbox.is-day{background:var(--paper);border:1px solid var(--line);}
+  .day-mapbox.is-night{background:#161822;border:1px solid #2b2f3d;color:#d9dcea;}
+  .routestrip{display:flex;flex-direction:column;}
+  .rstop{display:flex;align-items:center;gap:10px;padding:6px 0;}
+  .rstop .num{
+    flex:0 0 20px;height:20px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-family:var(--mono);
+    border:1px solid currentColor;
+  }
+  .rstop .rline{width:1px;height:16px;background:currentColor;opacity:.35;margin-left:10px;}
+  .rstop a{text-decoration:none;color:inherit;font-size:13.5px;border-bottom:1px dotted currentColor;}
+  .navall{
+    display:inline-block;margin-top:10px;font-size:13px;
+    padding:8px 14px;border-radius:20px;
+    text-decoration:none;
+    background:var(--teal);color:#fff;
+  }
+  .is-night .navall{background:#4fa79c;}
+
+  /* ---------- todo ---------- */
+  .todolist{list-style:none;padding:0;margin:0;border-top:1px solid var(--line);}
+  .todolist li{
+    padding:13px 0;border-bottom:1px solid var(--line);
+    display:flex;gap:12px;font-size:14.5px;align-items:flex-start;
+  }
+  .todolist .mark{flex:0 0 6px;height:6px;border-radius:50%;background:var(--ink-soft);margin-top:7px;}
+  .todolist .txt b{display:block;}
+  .todolist .txt span{font-size:12.5px;color:var(--ink-soft);}
+  .todolist a{color:var(--teal);text-decoration:none;border-bottom:1px dotted var(--teal);}
+
+  /* ---------- tips ---------- */
+  .tips{border-top:1px solid var(--line);}
+  .tip{padding:14px 0;border-bottom:1px solid var(--line);font-size:14.5px;}
+  .tip b{display:block;margin-bottom:3px;}
+  .tip span{color:var(--ink-soft);}
+
+  footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+<nav class="jumpnav"><div class="jumpnav-inner">
+  <a href="#now">此刻</a>
+  <a href="#map">总览</a>
+  <a href="#logistics">已确认</a>
+  <a href="#itinerary">逐日</a>
+  <a href="#todo">待办</a>
+  <a href="#tips">贴士</a>
+</div></nav>
+
+<div class="wrap">
+
+  <header class="now" id="now">
+    <p class="now-label">此刻关注</p>
+    <p class="now-title" id="now-title">加载中…</p>
+    <div class="now-clock" id="now-clock">
+      <div class="now-unit"><div class="now-num" id="nd">–</div><div class="now-unit-label">天</div></div>
+      <div class="now-unit"><div class="now-num" id="nh">–</div><div class="now-unit-label">时</div></div>
+      <div class="now-unit"><div class="now-num" id="nm">–</div><div class="now-unit-label">分</div></div>
+      <div class="now-unit"><div class="now-num" id="ns">–</div><div class="now-unit-label">秒</div></div>
+    </div>
+    <p class="now-sub" id="now-sub"></p>
+  </header>
+
+  <section id="map">
+    <div class="sec-head">
+      <p class="sec-eyebrow">Boston → Salem → New York → Washington DC → Chicago</p>
+      <h2 class="sec-title">行程总览</h2>
+      <p class="sec-note">实线 = 火车段，虚线 = 航班段。圆点颜色代表每晚落脚的城市。</p>
+    </div>
+    <div class="mapcard">
+      <svg viewBox="0 0 380 460" xmlns="http://www.w3.org/2000/svg">
+        <!-- DC -> Chicago flight (dashed navy) -->
+        <path d="M205,300 C150,270 95,255 78,238" fill="none" stroke="#2b4468" stroke-width="2.4" stroke-dasharray="1 7" stroke-linecap="round" opacity=".85"/>
+        <!-- NY -> DC train (solid rust) -->
+        <path d="M248,190 C232,225 222,262 207,298" fill="none" stroke="#a34530" stroke-width="2.6" stroke-linecap="round" opacity=".9"/>
+        <!-- Boston -> NY train (solid teal) -->
+        <path d="M285,78 C268,112 258,150 249,188" fill="none" stroke="#2c6b64" stroke-width="2.6" stroke-linecap="round" opacity=".9"/>
+        <!-- Boston <-> Salem day trip (dashed amber loop) -->
+        <path d="M283,74 C300,58 312,48 316,42 C308,54 296,66 285,76" fill="none" stroke="#a9711f" stroke-width="2.2" stroke-dasharray="1 6" stroke-linecap="round"/>
+        <!-- Dublin -> Boston flight in (dashed, top right) -->
+        <path d="M355,20 C330,35 305,52 288,70" fill="none" stroke="#a9711f" stroke-width="2" stroke-dasharray="1 6" stroke-linecap="round" opacity=".7"/>
+        <!-- Chicago -> Dublin flight out (dashed, arcing to top right) -->
+        <path d="M72,232 C140,150 260,60 353,18" fill="none" stroke="#2b4468" stroke-width="1.8" stroke-dasharray="1 7" stroke-linecap="round" opacity=".55"/>
+
+        <!-- city nodes -->
+        <g>
+          <circle cx="318" cy="40" r="4" fill="none" stroke="#a9711f" stroke-width="1.6"/>
+          <text x="326" y="44" font-family="Georgia,serif" font-size="12" fill="#a9711f">Salem</text>
+          <text x="326" y="56" font-family="-apple-system,sans-serif" font-size="9.5" fill="#6b6355">万圣节日游</text>
+        </g>
+
+        <g>
+          <circle cx="286" cy="76" r="7" fill="#f1e2c4" stroke="#a9711f" stroke-width="2"/>
+          <text x="298" y="72" font-family="Georgia,serif" font-size="13.5" fill="#242019">Boston</text>
+          <text x="298" y="86" font-family="-apple-system,sans-serif" font-size="10" fill="#6b6355">10/29–11/2 · 4晚 · 待定</text>
+        </g>
+
+        <g>
+          <circle cx="249" cy="190" r="7" fill="#dbe9e5" stroke="#2c6b64" stroke-width="2"/>
+          <text x="261" y="186" font-family="Georgia,serif" font-size="13.5" fill="#242019">New York</text>
+          <text x="261" y="200" font-family="-apple-system,sans-serif" font-size="10" fill="#6b6355">11/2–11/5 · 3晚 · 已订</text>
+        </g>
+
+        <g>
+          <circle cx="207" cy="300" r="7" fill="#f1ddd3" stroke="#a34530" stroke-width="2"/>
+          <text x="219" y="296" font-family="Georgia,serif" font-size="13.5" fill="#242019">Washington DC</text>
+          <text x="219" y="310" font-family="-apple-system,sans-serif" font-size="10" fill="#6b6355">11/6–11/7 · 1晚 · 暂定</text>
+        </g>
+
+        <g>
+          <circle cx="72" cy="232" r="7" fill="#dde4ee" stroke="#2b4468" stroke-width="2"/>
+          <text x="20" y="216" font-family="Georgia,serif" font-size="13.5" fill="#242019">Chicago</text>
+          <text x="6" y="248" font-family="-apple-system,sans-serif" font-size="10" fill="#6b6355">11/7–11/10 · 3晚 · 已订</text>
+        </g>
+
+        <text x="330" y="14" font-family="-apple-system,sans-serif" font-size="10" fill="#a9711f" text-anchor="end">✈ 都柏林</text>
+        <text x="368" y="16" font-family="-apple-system,sans-serif" font-size="10" fill="#2b4468" text-anchor="end">✈ 都柏林</text>
+      </svg>
+      <div class="maplegend">
+        <span><i class="swatch" style="background:#a9711f"></i>波士顿段（含 Salem）</span>
+        <span><i class="swatch" style="background:#2c6b64"></i>纽约段</span>
+        <span><i class="swatch" style="background:#a34530"></i>华盛顿段</span>
+        <span><i class="swatch" style="background:#2b4468"></i>芝加哥段</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="logistics">
+    <div class="sec-head">
+      <p class="sec-eyebrow">Confirmed</p>
+      <h2 class="sec-title">已确认的交通与住宿</h2>
+      <p class="sec-note">不含确认号、证件号、订单号——这些只有你自己需要，出示订票 App 或邮件即可。</p>
+    </div>
+    <div id="logistics-list"></div>
+  </section>
+
+  <section id="itinerary">
+    <div class="sec-head">
+      <p class="sec-eyebrow">Day by day</p>
+      <h2 class="sec-title">逐日行程</h2>
+      <p class="sec-note">左边是时间，右边是安排。标了「需预约」的项目请提前处理，其余是草拟计划，可以随时调整。</p>
+    </div>
+    <div id="days-list"></div>
+  </section>
+
+  <section id="todo">
+    <div class="sec-head">
+      <p class="sec-eyebrow">To do</p>
+      <h2 class="sec-title">待办清单</h2>
+      <p class="sec-note">办完一项，告诉我，我改页面——这份清单不做成可勾选的，勾了也只有你自己的浏览器看得见。</p>
+    </div>
+    <ul class="todolist" id="todo-list"></ul>
+  </section>
+
+  <section id="tips">
+    <div class="sec-head">
+      <p class="sec-eyebrow">Notes</p>
+      <h2 class="sec-title">实用贴士</h2>
+    </div>
+    <div class="tips" id="tips-list"></div>
+  </section>
+
+  <footer>此页面只在你打开的浏览器里显示，不会被搜索引擎收录。</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============ helpers ============ */
+function mapsUrl(q){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
+function navUrl(q){ return "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(q) + "&travelmode=transit"; }
+function multiNavUrl(stops){
+  if(!stops.length) return "#";
+  if(stops.length === 1) return navUrl(stops[0]);
+  var origin = encodeURIComponent(stops[0]);
+  var dest = encodeURIComponent(stops[stops.length-1]);
+  var mid = stops.slice(1,-1).map(encodeURIComponent).join("|");
+  var url = "https://www.google.com/maps/dir/?api=1&origin="+origin+"&destination="+dest+"&travelmode=transit";
+  if(mid) url += "&waypoints=" + mid;
+  return url;
+}
+function pad(n){ return String(n).padStart(2,"0"); }
+
+/* ============ key moments (all UTC, precomputed so any timezone opens correctly) ============ */
+var KEY = [
+  {t:"2026-10-29T11:45:00Z", label:"都柏林 → 波士顿 起飞", sub:"EI133"},
+  {t:"2026-10-29T18:55:00Z", label:"抵达波士顿 Logan 机场", sub:"BOS"},
+  {t:"2026-11-02T11:25:00Z", label:"波士顿 → 纽约 起飞", sub:"Amtrak 1195"},
+  {t:"2026-11-02T15:53:00Z", label:"抵达纽约 Penn Station", sub:""},
+  {t:"2026-11-02T21:00:00Z", label:"HI New York City Hostel 可入住", sub:""},
+  {t:"2026-11-05T16:00:00Z", label:"HI New York City Hostel 退房", sub:""},
+  {t:"2026-11-06T04:23:00Z", label:"纽约 → 华盛顿 起飞（夜车）", sub:"Amtrak 67"},
+  {t:"2026-11-06T11:54:00Z", label:"抵达华盛顿 Union Station", sub:""},
+  {t:"2026-11-07T21:54:00Z", label:"华盛顿 → 芝加哥 起飞", sub:"AA2327"},
+  {t:"2026-11-07T22:00:00Z", label:"HI Chicago Hostel 可入住", sub:""},
+  {t:"2026-11-08T00:27:00Z", label:"抵达芝加哥 O'Hare 机场", sub:""},
+  {t:"2026-11-10T17:00:00Z", label:"HI Chicago Hostel 退房", sub:""},
+  {t:"2026-11-11T02:05:00Z", label:"芝加哥 → 都柏林 起飞", sub:"EI124"},
+  {t:"2026-11-11T09:30:00Z", label:"抵达都柏林，行程结束", sub:""}
+].map(function(k){ return {ts:new Date(k.t).getTime(), label:k.label, sub:k.sub}; })
+ .sort(function(a,b){ return a.ts-b.ts; });
+
+function updateNow(){
+  var now = Date.now();
+  var next = null;
+  for(var i=0;i<KEY.length;i++){ if(KEY[i].ts > now){ next = KEY[i]; break; } }
+  var titleEl = document.getElementById("now-title");
+  var subEl = document.getElementById("now-sub");
+  if(!next){
+    document.getElementById("now-clock").style.display = "none";
+    titleEl.textContent = "旅程已经结束";
+    subEl.innerHTML = "希望这十三天都顺利。";
+    return;
+  }
+  var diff = next.ts - now;
+  var d = Math.floor(diff/86400000);
+  var h = Math.floor((diff%86400000)/3600000);
+  var m = Math.floor((diff%3600000)/60000);
+  var s = Math.floor((diff%60000)/1000);
+  document.getElementById("nd").textContent = d;
+  document.getElementById("nh").textContent = pad(h);
+  document.getElementById("nm").textContent = pad(m);
+  document.getElementById("ns").textContent = pad(s);
+  titleEl.textContent = next.label + (next.sub ? "（"+next.sub+"）" : "");
+  subEl.innerHTML = "倒计时基于精确的世界时计算，不管你在哪个时区打开这个页面都不会算错。";
+}
+updateNow();
+setInterval(updateNow, 1000);
+
+/* ============ logistics (confirmed / pending bookings) ============ */
+var LOGI = [
+  {
+    title:"EI133 · 都柏林 → 波士顿", status:"ok",
+    rows:[
+      ["起飞","10/29 周四 11:45 · 都柏林时间 GMT+0"],
+      ["到达","10/29 周四 14:55 · 波士顿时间 EDT (UTC-4)"],
+      ["机场","Dublin Airport (DUB) → Boston Logan Intl (BOS)"]
+    ]
+  },
+  {
+    title:"波士顿住宿", status:"pending",
+    rows:[
+      ["日期","10/29 – 11/2，共4晚"],
+      ["状态","小红书链接下单中，月底前没定就转 HI Boston"],
+      ["备选","HI Boston Hostel · 19 Stuart Street, Boston, MA 02116 · (617) 536-9455",true]
+    ]
+  },
+  {
+    title:"Amtrak 1195 · 波士顿 → 纽约", status:"ok",
+    rows:[
+      ["起飞","11/2 周一 06:25 · EST (UTC-5) · Boston South Station",true],
+      ["到达","11/2 周一 10:53 · EST · New York Penn Station",true]
+    ]
+  },
+  {
+    title:"HI New York City Hostel", status:"ok",
+    rows:[
+      ["日期","11/2 16:00 入住 → 11/5 11:00 退房"],
+      ["地址","891 Amsterdam Ave, New York, NY 10025",true],
+      ["电话","+1 212-932-2300"]
+    ]
+  },
+  {
+    title:"Amtrak 67 · 纽约 → 华盛顿（夜车）", status:"ok",
+    rows:[
+      ["起飞","11/5 周四 23:23 · EST · Moynihan Train Hall",true],
+      ["到达","11/6 周五 06:54 · EST · Union Station",true],
+      ["备注","硬座过夜，无卧铺"]
+    ]
+  },
+  {
+    title:"华盛顿住宿 · HighRoad Hostel DC", status:"pending",
+    rows:[
+      ["日期","11/6 – 11/7，共1晚（暂定，尚未下单）"],
+      ["地址","1804 Belmont Rd NW, Washington, DC 20009",true],
+      ["位置提醒","在 Adams Morgan，不在国会/机场这条动线上，11/7 取寄存行李需绕路，见逐日行程提示"]
+    ]
+  },
+  {
+    title:"AA2327 · 华盛顿 → 芝加哥", status:"ok",
+    rows:[
+      ["起飞","11/7 周六 16:54 · EST · Reagan National (DCA)",true],
+      ["到达","11/7 周六 18:27 · CST (UTC-6) · O'Hare (ORD)",true],
+      ["舱位","Basic Economy"]
+    ]
+  },
+  {
+    title:"HI Chicago Hostel", status:"ok",
+    rows:[
+      ["日期","11/7 16:00 入住 → 11/10 11:00 退房"],
+      ["地址","24 E Ida B. Wells Drive, Chicago, IL 60605",true],
+      ["电话","+1 312-360-0300"],
+      ["位置","离 Art Institute 步行约8分钟，离 Millennium Park 约9分钟"]
+    ]
+  },
+  {
+    title:"EI124 · 芝加哥 → 都柏林", status:"ok",
+    rows:[
+      ["起飞","11/10 周二 20:05 · CST (UTC-6) · O'Hare (ORD)",true],
+      ["到达","11/11 周三 09:30 · GMT (UTC+0) · Dublin Airport"]
+    ]
+  }
+];
+
+function renderLogistics(){
+  var el = document.getElementById("logistics-list");
+  LOGI.forEach(function(l){
+    var card = document.createElement("div");
+    card.className = "logi";
+    var head = document.createElement("div");
+    head.className = "logi-head";
+    head.innerHTML = "<h3>"+l.title+"</h3><span class='status "+l.status+"'>"+(l.status==="ok"?"已确认":"待定")+"</span>";
+    card.appendChild(head);
+    var body = document.createElement("div");
+    body.className = "logi-body";
+    l.rows.forEach(function(r){
+      var row = document.createElement("div");
+      row.className = "logi-row";
+      var v = r[1];
+      if(r[2]){
+        v = v.replace(/^([^·]+)/, function(m){ return "<a class='navlink' target='_blank' rel='noopener' href='"+navUrl(m.trim())+"'>"+m.trim()+"</a>"; });
+      }
+      row.innerHTML = "<div class='k'>"+r[0]+"</div><div class='v'>"+v+"</div>";
+      body.appendChild(row);
+    });
+    card.appendChild(body);
+    el.appendChild(card);
+  });
+}
+renderLogistics();
+
+/* ============ day-by-day itinerary ============ */
+// status: 'confirmed' = 固定时间, 'draft' = 草拟计划
+var DAYS = [
+  { num:1, date:"10/29 周四", city:"Boston", leg:"--amber:#a9711f", overnight:"住宿待定", overnightStatus:"pending",
+    items:[
+      {time:"11:45", tz:"都柏林时间 GMT+0", title:"EI133 都柏林→波士顿 起飞", status:"confirmed"},
+      {time:"14:55", tz:"波士顿时间 EDT", title:"抵达 Boston Logan 机场", status:"confirmed", q:"Boston Logan International Airport"},
+      {time:"约16:00", tz:"EDT", title:"酒店放行李", status:"draft", note:"住宿待定，见「已确认」栏"},
+      {time:"下午", tz:"", title:"Boston Common", status:"draft", q:"Boston Common, Boston, MA"},
+      {time:"傍晚", tz:"", title:"Beacon Hill", status:"draft", q:"Beacon Hill, Boston, MA"},
+      {time:"晚饭", tz:"", title:"附近觅食", status:"draft"}
+    ]
+  },
+  { num:2, date:"10/30 周五", city:"Boston", leg:"--amber:#a9711f", overnight:"同上", overnightStatus:"pending",
+    items:[
+      {time:"上午", tz:"", title:"Harvard 校园参观", status:"draft", q:"Harvard University, Cambridge, MA",
+        book:{label:"预约链接（你已发过）", note:"具体时段确认后告诉我，我把时间填进来"}},
+      {time:"下午", tz:"", title:"MIT 校园参观", status:"draft", q:"MIT, Cambridge, MA",
+        book:{label:"预约链接（你已发过）", note:"同上"}},
+      {time:"晚上", tz:"", title:"自由活动", status:"draft", note:"原定 Rockport 已取消"}
+    ]
+  },
+  { num:3, date:"10/31 周六", city:"Boston → Salem", leg:"--amber:#a9711f", overnight:"回 Boston 住", overnightStatus:"pending",
+    items:[
+      {time:"建议早班车", tz:"", title:"前往 Salem", status:"draft", q:"Salem, MA", note:"Halloween 当天人非常多，官方每年都建议坐 commuter rail，别开车"},
+      {time:"全天", tz:"", title:"Salem Haunted Happenings", status:"draft", q:"Salem, MA"},
+      {time:"晚上", tz:"", title:"返回 Boston", status:"draft", note:"末班车时刻每年略有不同，出发前一周查 MBTA 官网当年公告，建议20:30前离开市区"}
+    ]
+  },
+  { num:4, date:"11/1 周日", city:"Boston", leg:"--amber:#a9711f", overnight:"回 Boston 住", overnightStatus:"pending",
+    items:[
+      {time:"上午", tz:"", title:"Freedom Trail", status:"draft", q:"Freedom Trail, Boston, MA"},
+      {time:"下午", tz:"", title:"Back Bay", status:"draft", q:"Back Bay, Boston, MA"},
+      {time:"", tz:"", title:"Trader Joe's", status:"draft", q:"Trader Joe's, Boylston Street, Boston, MA"},
+      {time:"凌晨2点", tz:"", title:"美国东部进入冬令时", status:"draft", note:"手机会自动调，之后波士顿/纽约/华盛顿从 UTC-4 变成 UTC-5"}
+    ]
+  },
+  { num:5, date:"11/2 周一", city:"→ New York", leg:"--teal:#2c6b64", overnight:"HI New York City Hostel", overnightStatus:"ok",
+    items:[
+      {time:"06:25", tz:"波士顿时间 EST", title:"Amtrak 1195 波士顿→纽约 起飞", status:"confirmed", q:"Boston South Station"},
+      {time:"10:53", tz:"EST", title:"抵达 New York Penn Station", status:"confirmed", q:"Penn Station, New York, NY"},
+      {time:"到达后", tz:"", title:"行李寄存", status:"draft", note:"酒店16:00才能入住，问前台能否提前寄存"},
+      {time:"", tz:"", title:"Chinatown", status:"draft", q:"Chinatown, New York, NY"},
+      {time:"", tz:"", title:"The Met", status:"draft", q:"The Metropolitan Museum of Art, New York, NY", note:"周一开放，10:00–17:00"},
+      {time:"", tz:"", title:"Central Park", status:"draft", q:"Central Park, New York, NY"},
+      {time:"16:00", tz:"EST", title:"入住 HI New York City Hostel", status:"confirmed", q:"891 Amsterdam Ave, New York, NY"}
+    ]
+  },
+  { num:6, date:"11/3 周二", city:"New York", leg:"--teal:#2c6b64", overnight:"HI New York City Hostel", overnightStatus:"ok",
+    items:[
+      {time:"建议早班船", tz:"", title:"Statue of Liberty + Ellis Island", status:"draft", q:"Statue of Liberty, New York, NY",
+        book:{label:"statuecitycruises.com", url:"https://www.statuecitycruises.com", note:"普通票提前3-7天即可，别拖到11月"}},
+      {time:"", tz:"", title:"Lower Manhattan", status:"draft", q:"Lower Manhattan, New York, NY"}
+    ]
+  },
+  { num:7, date:"11/4 周三", city:"New York", leg:"--teal:#2c6b64", overnight:"HI New York City Hostel", overnightStatus:"ok",
+    items:[
+      {time:"", tz:"", title:"Brooklyn Bridge", status:"draft", q:"Brooklyn Bridge, New York, NY"},
+      {time:"", tz:"", title:"DUMBO", status:"draft", q:"DUMBO, Brooklyn, NY"},
+      {time:"", tz:"", title:"Brooklyn", status:"draft", q:"Brooklyn, NY"}
+    ]
+  },
+  { num:8, date:"11/5 周四", city:"New York →", leg:"--teal:#2c6b64", overnight:"火车上过夜", overnightStatus:"ok",
+    items:[
+      {time:"11:00", tz:"EST", title:"HI New York City Hostel 退房", status:"confirmed"},
+      {time:"退房后", tz:"", title:"行李寄存", status:"draft", note:"距离晚上23:23上车还有12小时"},
+      {time:"", tz:"", title:"Fifth Avenue", status:"draft", q:"Fifth Avenue, New York, NY"},
+      {time:"", tz:"", title:"Midtown", status:"draft", q:"Midtown Manhattan, New York, NY"},
+      {time:"", tz:"", title:"Empire State Building", status:"draft", q:"Empire State Building, New York, NY",
+        book:{label:"esbnyc.com", url:"https://www.esbnyc.com", note:"建议订时段票少排队"}},
+      {time:"23:23", tz:"EST", title:"Amtrak 67 纽约→华盛顿 起飞（硬座过夜）", status:"confirmed", q:"Moynihan Train Hall, New York, NY"}
+    ]
+  },
+  { num:9, date:"11/6 周五", city:"Washington DC", leg:"--rust:#a34530", overnight:"HighRoad Hostel（暂定）", overnightStatus:"pending",
+    items:[
+      {time:"06:54", tz:"华盛顿时间 EST", title:"抵达 Union Station", status:"confirmed", q:"Union Station, Washington, DC"},
+      {time:"到达后", tz:"", title:"行李寄存于 HighRoad Hostel", status:"draft", note:"16:00才能正式入住，先去寄存"},
+      {time:"", tz:"", title:"National Mall", status:"draft", q:"National Mall, Washington, DC"},
+      {time:"可选", tz:"", title:"白宫内部参观", status:"draft", q:"White House, Washington, DC",
+        note:"能否成行现在真不确定：舞厅施工导致的暂停状态查不到最新消息，外国游客政策也可能变。外观随时能看，别把这天押在它上面",
+        book:{label:"联系中国驻美使馆问一下", note:"免费，值得问，但别抱太大期望"}},
+      {time:"", tz:"", title:"航空航天博物馆", status:"draft", q:"National Air and Space Museum, Washington, DC",
+        book:{label:"airandspace.si.edu", url:"https://airandspace.si.edu", note:"免费但必须有时段票，当日票8:30放"}},
+      {time:"約16:00", tz:"", title:"入住 HighRoad Hostel（暂定）", status:"draft"}
+    ]
+  },
+  { num:10, date:"11/7 周六", city:"DC → Chicago", leg:"--navy:#2b4468", overnight:"HI Chicago Hostel", overnightStatus:"ok",
+    items:[
+      {time:"上午", tz:"", title:"国会大厦", status:"draft", q:"United States Capitol, Washington, DC",
+        book:{label:"visitthecapitol.gov", url:"https://www.visitthecapitol.gov", note:"免费，不强制预约但建议线上订，能提前90天订"}},
+      {time:"", tz:"", title:"取回寄存的行李", status:"draft", note:"HighRoad 在 Adams Morgan，回去取行李会绕路，提前算好时间"},
+      {time:"", tz:"", title:"Chinatown (Gallery Place)", status:"draft", q:"Gallery Place-Chinatown, Washington, DC"},
+      {time:"14:00前", tz:"", title:"前往 DCA 机场", status:"draft", note:"国内航班建议提前2小时值机"},
+      {time:"16:54", tz:"华盛顿时间 EST", title:"AA2327 华盛顿→芝加哥 起飞", status:"confirmed", q:"Ronald Reagan Washington National Airport"},
+      {time:"18:27", tz:"芝加哥时间 CST (UTC-6)", title:"抵达 Chicago O'Hare 机场", status:"confirmed", q:"O'Hare International Airport"},
+      {time:"16:00起", tz:"CST", title:"入住 HI Chicago Hostel", status:"confirmed", q:"24 E Ida B. Wells Drive, Chicago, IL"},
+      {time:"夜晚", tz:"", title:"Riverwalk 夜景 + Cloud Gate 夜景", status:"draft", q:"Chicago Riverwalk", note:"把「豆子」挪到这里看，夜景更好看还顺路"},
+      {time:"", tz:"", title:"Michigan Ave 附近晚饭", status:"draft", q:"Michigan Avenue, Chicago, IL"}
+    ]
+  },
+  { num:11, date:"11/8 周日", city:"Chicago", leg:"--navy:#2b4468", overnight:"HI Chicago Hostel", overnightStatus:"ok",
+    items:[
+      {time:"", tz:"", title:"Millennium Park", status:"draft", q:"Millennium Park, Chicago, IL"},
+      {time:"", tz:"", title:"Art Institute of Chicago", status:"draft", q:"Art Institute of Chicago", note:"留2-3小时，这天最耗时间的一项"},
+      {time:"", tz:"", title:"Grant Park", status:"draft", q:"Grant Park, Chicago, IL"},
+      {time:"", tz:"", title:"Museum Campus（只看外观）", status:"draft", q:"Museum Campus, Chicago, IL"},
+      {time:"", tz:"", title:"State Street / Loop 购物", status:"draft", q:"State Street, Chicago, IL"},
+      {time:"有余力再去", tz:"", title:"Navy Pier + 湖滨步道", status:"draft", q:"Navy Pier, Chicago, IL", note:"时间不够就跳过，这天本来就排得满"}
+    ]
+  },
+  { num:12, date:"11/9 周一", city:"Chicago", leg:"--navy:#2b4468", overnight:"HI Chicago Hostel", overnightStatus:"ok",
+    items:[
+      {time:"上午", tz:"", title:"Griffin Museum of Science and Industry", status:"draft", q:"Museum of Science and Industry, Chicago, IL", note:"原 MSI，在 Hyde Park，离市区约30-40分钟车程（Metra Electric 或公交）"},
+      {time:"下午", tz:"", title:"建筑游船", status:"draft", q:"Chicago Architecture Center River Cruise",
+        book:{label:"cruisechicago.com", url:"https://www.cruisechicago.com", note:"2026年船季到11/23，这天正常运营，建议线上订"}}
+    ]
+  },
+  { num:13, date:"11/10 周二", city:"Chicago →", leg:"--navy:#2b4468", overnight:"回程航班", overnightStatus:"ok",
+    items:[
+      {time:"11:00", tz:"CST", title:"HI Chicago Hostel 退房", status:"confirmed"},
+      {time:"白天", tz:"", title:"自由活动 / 购物", status:"draft"},
+      {time:"傍晚", tz:"", title:"前往 O'Hare 机场", status:"draft", q:"O'Hare International Airport"},
+      {time:"20:05", tz:"芝加哥时间 CST", title:"EI124 芝加哥→都柏林 起飞", status:"confirmed"},
+      {time:"次日09:30", tz:"都柏林时间 GMT+0", title:"抵达都柏林", status:"confirmed"}
+    ]
+  }
+];
+
+function isNightNow(){
+  var h = new Date().getHours();
+  return (h >= 19 || h < 6);
+}
+
+function renderDays(){
+  var el = document.getElementById("days-list");
+  DAYS.forEach(function(d){
+    var card = document.createElement("div");
+    card.className = "day";
+    card.style.setProperty("--leg", d.leg.split(":")[1]);
+
+    var head = document.createElement("div");
+    head.className = "day-head";
+    head.innerHTML =
+      "<div class='day-top'><div><div class='day-num'>DAY "+d.num+"</div>"+
+      "<div class='day-date'>"+d.date+"</div></div>"+
+      "<div class='day-city'>"+d.city+"</div></div>"+
+      "<div class='day-overnight'><span class='dot "+d.overnightStatus+"'></span>今晚："+d.overnight+"</div>";
+    card.appendChild(head);
+
+    var items = document.createElement("div");
+    items.className = "day-items";
+    var stops = [];
+    d.items.forEach(function(it){
+      var row = document.createElement("div");
+      row.className = "item";
+      var timeHtml = "";
+      if(it.time){
+        timeHtml = "<b>"+it.time+"</b>" + (it.tz ? "<span class='tz'>"+it.tz+"</span>" : "");
+      }
+      var titleHtml = it.title;
+      if(it.q){
+        titleHtml = "<a target='_blank' rel='noopener' href='"+navUrl(it.q)+"'>"+it.title+"</a>";
+        stops.push(it.q);
+      }
+      if(it.book){ titleHtml += "<span class='tag-book'>需预约</span>"; }
+      else if(it.status === "draft" && it.time && it.time !== "全天" ){ /* keep clean, no extra tag */ }
+      var noteHtml = "";
+      if(it.note){ noteHtml = "<div class='item-note"+(it.book||/不确定|风险|绕路/.test(it.note)?" alert":"")+"'>"+it.note+"</div>"; }
+      var bookHtml = "";
+      if(it.book){
+        var linkText = it.book.url ? "<a target='_blank' rel='noopener' href='"+it.book.url+"'>"+it.book.label+"</a>" : it.book.label;
+        bookHtml = "<div class='booklink'>"+linkText+(it.book.note ? " — "+it.book.note : "")+"</div>";
+      }
+      row.innerHTML = "<div class='item-time'>"+timeHtml+"</div><div class='item-main'><div class='item-title'>"+titleHtml+"</div>"+noteHtml+bookHtml+"</div>";
+      items.appendChild(row);
+    });
+    card.appendChild(items);
+
+    if(stops.length){
+      var toggle = document.createElement("button");
+      toggle.className = "day-maptoggle";
+      toggle.type = "button";
+      toggle.setAttribute("aria-expanded","false");
+      toggle.innerHTML = "展开当日路线（"+stops.length+" 站）<span class='chev'>▾</span>";
+      var box = document.createElement("div");
+      box.className = "day-mapbox";
+
+      function buildBox(){
+        var night = isNightNow();
+        box.className = "day-mapbox " + (night ? "is-night" : "is-day") + (box.classList.contains("open") ? " open" : "");
+        var strip = "<div class='routestrip'>";
+        stops.forEach(function(s,i){
+          strip += "<div class='rstop'><span class='num'>"+(i+1)+"</span><a target='_blank' rel='noopener' href='"+mapsUrl(s)+"'>"+s.split(",")[0]+"</a></div>";
+          if(i < stops.length-1) strip += "<div class='rline'></div>";
+        });
+        strip += "</div>";
+        strip += "<a class='navall' target='_blank' rel='noopener' href='"+multiNavUrl(stops)+"'>一键打开全天导航</a>";
+        box.innerHTML = strip;
+      }
+      buildBox();
+
+      toggle.addEventListener("click", function(){
+        var open = box.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        buildBox();
+      });
+
+      card.appendChild(toggle);
+      card.appendChild(box);
+    }
+
+    el.appendChild(card);
+  });
+}
+renderDays();
+
+/* ============ to-do list ============ */
+var TODO = [
+  {b:"完成 EVUS 登记", s:"官方免费网站，建议出发前尽早办，别用收费第三方站。", link:"https://www.evus.gov"},
+  {b:"Harvard / MIT 校园参观预约", s:"确认具体时段后告诉我，我把时间填进 10/30 那天。"},
+  {b:"波士顿住宿最终确认", s:"小红书链接 or HI Boston，月底前定下来。"},
+  {b:"华盛顿住宿：HighRoad Hostel 下单", s:"并想好11/7取行李的路线（回去取 或 市区付费寄存柜）。"},
+  {b:"国会大厦预约", s:"免费，建议线上订11/7上午场。", link:"https://www.visitthecapitol.gov"},
+  {b:"航空航天博物馆时段票", s:"免费但必须有票，10月内查11/6是否放票。", link:"https://airandspace.si.edu"},
+  {b:"白宫内部参观", s:"联系中国驻美使馆问一下，但大概率去不了，别抱期望。"},
+  {b:"自由女神像 + 艾利斯岛门票", s:"10月内订，别拖到11月。", link:"https://www.statuecitycruises.com"},
+  {b:"帝国大厦时段票", s:"10月内订即可。", link:"https://www.esbnyc.com"},
+  {b:"建筑游船门票", s:"11/9 那天，10月内订。", link:"https://www.cruisechicago.com"},
+  {b:"Visible eSIM 试用激活", s:"建议10/29落地波士顿当天激活，覆盖到11/10离境。"}
+];
+function renderTodo(){
+  var el = document.getElementById("todo-list");
+  TODO.forEach(function(t){
+    var li = document.createElement("li");
+    var linkHtml = t.link ? " <a target='_blank' rel='noopener' href='"+t.link+"'>"+t.link.replace(/^https?:\/\//,"")+"</a>" : "";
+    li.innerHTML = "<span class='mark'></span><span class='txt'><b>"+t.b+"</b><span>"+t.s+linkHtml+"</span></span>";
+    el.appendChild(li);
+  });
+}
+renderTodo();
+
+/* ============ tips ============ */
+var TIPS = [
+  {b:"时区会变两次", s:"10/25都柏林已切回GMT+0；11/1凌晨美国东部切到EST（UTC-5）；到芝加哥是CST（UTC-6）。页面里所有时间已经按当地时区标好，倒计时也是按精确世界时算的，不用自己换算。"},
+  {b:"行李寄存是这趟最大的隐藏麻烦", s:"11/2到纽约、11/5晚上离开纽约、11/6到华盛顿、11/7离开华盛顿，四次都要带着行李在城里晃，出发前问清楚各家青旅能不能提前/延后寄存。"},
+  {b:"11/5晚上是最累的一段", s:"11点退房，23:23才上车，中间12小时+硬座过夜，白天行程别排太满，留出休息的空当。"},
+  {b:"Salem万圣节当天", s:"官方每年都建议坐火车、别开车，末班车时刻出发前一周查MBTA最新公告。"},
+  {b:"插座", s:"美国是Type A/B，都柏林是Type G，记得带转换插头。"},
+  {b:"交通卡", s:"波士顿用CharlieCard、纽约用OMNY（信用卡/手机可直接拍卡）、华盛顿用SmarTrip、芝加哥用Ventra，都可以到当地再买或用手机NFC。"},
+  {b:"小费", s:"餐厅一般15–20%，青旅通常不用给。"},
+  {b:"十一月东北部很冷", s:"尤其芝加哥湖边风大，带够保暖的外套。"}
+];
+function renderTips(){
+  var el = document.getElementById("tips-list");
+  TIPS.forEach(function(t){
+    var div = document.createElement("div");
+    div.className = "tip";
+    div.innerHTML = "<b>"+t.b+"</b><span>"+t.s+"</span>";
+    el.appendChild(div);
+  });
+}
+renderTips();
+
+})();
+</script>
+</body>
+</html>
